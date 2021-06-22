@@ -1,0 +1,60 @@
+.new-room {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+}
+
+aside {
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: baseline;
+    background-color: #835afd;
+    color: #fff;
+}
+
+aside * {
+    margin-left: 2rem;
+}
+
+main {
+    flex: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.room-container {
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    margin: 1rem 0 1rem 2rem;
+    line-height: 2.1rem;
+}
+
+form {
+    margin: 0.5rem 0;
+}
+
+input {
+    height: 3rem;
+    border-radius: 10px;
+    border: solid #a8a8b3 thin;
+    padding: 10px;
+    width: 100%;
+}
+
+.join-room {
+    color: #a8a8b3;
+}
+
+a {
+    font-family:inherit;
+    color: #835afd;
+}

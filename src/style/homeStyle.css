@@ -1,0 +1,99 @@
+.homepage {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+}
+
+aside {
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: baseline;
+    background-color: #835afd;
+    color: #fff;
+}
+
+aside * {
+    margin-left: 2rem;
+}
+
+aside img {
+    align-self: center;
+    margin-left: -2rem;
+}
+
+main {
+    flex: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.authentication {
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    margin: 1rem 0 1rem 2rem;
+    line-height: 2.1rem;
+}
+
+button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0.3rem;
+    border-radius: 7px;
+    border-style: none;
+    outline: none;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.89);
+    background-color: #ea4335;
+    margin: 0.3rem 0;
+}
+
+button * {
+    padding: 0.5rem;
+}
+
+form {
+    margin: 0.5rem 0;
+}
+
+input {
+    height: 3rem;
+    border-radius: 10px;
+    border: solid #a8a8b3 thin;
+    padding: 10px;
+    width: 100%;
+}
+
+.hint {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #a8a8b3;
+    font-size: 0.9rem;
+}
+
+.hint::before {
+    flex: 1;
+    content: '';
+    height: 1px;
+    background-color: #a8a8b3;
+    margin-right: 5px;
+}
+
+.hint::after {
+    flex: 1;
+    content: '';
+    height: 1px;
+    background-color: #a8a8b3;
+    margin-left: 5px;
+}
