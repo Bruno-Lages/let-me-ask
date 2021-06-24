@@ -1,0 +1,28 @@
+.copy {
+    border-radius: 10px;
+    border: solid 2px #835afd;
+    box-shadow: none;
+    cursor: pointer;
+    display: flex;
+    background-color: #fff;
+    height: 3rem;
+    overflow: hidden;
+}
+.copy * {
+    margin: 0;
+}
+
+.copyIcon {
+    background-color: #835afd;
+    display: flex;
+    justify-items: center;
+    align-content: center;
+    padding: 0 0.5rem 0 0.5rem;
+    height: 3rem;
+}
+
+.code {
+    display: block;
+    align-self: center;
+    padding: 0 0.5rem 0 0.5rem;
+}

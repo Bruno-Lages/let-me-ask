@@ -23,7 +23,7 @@ aside img {
     margin-left: -2rem;
 }
 
-main {
+.home-main {
     flex: 5;
     display: flex;
     justify-content: center;
@@ -43,7 +43,7 @@ h1 {
     line-height: 2.1rem;
 }
 
-button {
+.home-button {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -59,7 +59,7 @@ button {
     cursor: pointer;
 }
 
-button * {
+.home-button * {
     padding: 0.5rem;
 }
 

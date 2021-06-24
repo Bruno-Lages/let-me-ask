@@ -18,7 +18,7 @@ aside * {
     margin-left: 2rem;
 }
 
-main {
+.new-room-main {
     flex: 5;
     display: flex;
     justify-content: center;

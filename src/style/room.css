@@ -1,0 +1,44 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    height: 10%;
+    max-height: 100px;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.5);
+}
+
+header * {
+    margin: 1.5rem;
+}
+
+.room-form {
+    width: 80%;
+    margin: 1rem auto
+}
+
+.question {
+    max-width: 100%;
+    border-radius: 10px;
+    resize: none;
+    font-size: 1rem;
+    padding: 1rem;
+}
+
+.room-name {
+    margin-left: 0;
+}
+
+footer {
+    display: flex;
+    align-self: baseline;
+    justify-content: space-between;
+}
+
+p {
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+footer .button {
+    width: 10rem;
+}

@@ -28,11 +28,11 @@ export function Home() {
                 <p>Learn and share knowledge with other people</p>
             </aside>
 
-            <main>
+            <main className="home-main">
                 <div className="authentication">
                     <img src={logo} alt="let me ask logo" />
                     <h1>{user.name}</h1>
-                    <button type="button" onClick={redirectToNewRoom}>
+                    <button type="button" onClick={redirectToNewRoom} className="home-button">
                         <img src={googleLogo} alt="Google logo" />
                         <p>create an account with Google</p>
                     </button>

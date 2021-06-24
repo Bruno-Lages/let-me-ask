@@ -20,7 +20,7 @@ export function NewRoom() {
                 <p>Learn and share knowledge with other people</p>
             </aside>
 
-            <main>
+            <main className="new-room-main">
                 <div className="room-container">
                     <img src={logo} alt="let me ask logo" />
                     <h1>{user.name}</h1>
