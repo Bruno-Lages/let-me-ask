@@ -10,9 +10,33 @@ header * {
     margin: 1.5rem;
 }
 
-.room-form {
+main {
     width: 80%;
-    margin: 1rem auto
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.titles {
+    display: flex;
+    align-items: baseline;
+}
+
+h2 {
+    display: inline;
+    border-radius: 30px;
+    background-color: #e559f9;
+    color: #fff;
+    padding: 0 1rem;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    text-align: center;
+    height:max-content;
+    margin-left: 1rem;
+}
+
+.room-form {
+    margin: 0 auto
 }
 
 .question {
@@ -31,6 +55,27 @@ footer {
     display: flex;
     align-self: baseline;
     justify-content: space-between;
+}
+
+footer img {
+    border-radius: 50%;
+}
+
+.user-info {
+    height: 1.8rem;
+    display: flex;
+    color: #18181a;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.user-info p {
+    margin-left: 0.4rem 0 0 0.6rem;
+}
+
+.user-info img {
+    object-fit:contain;
+    margin-right: 0.5rem;
 }
 
 p {

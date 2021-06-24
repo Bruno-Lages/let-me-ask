@@ -1,5 +1,6 @@
-import { React, useContext } from 'react';
+import { React, useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { database } from '../config/firebase';
 
 import { Button } from '../components/Button';
 
@@ -13,7 +14,25 @@ import { authContext } from '../contexts/authContext';
 export function Home() {
     const { user, signInWithGoogle } = useContext(authContext);
 
+    const [room, setRoom] = useState('');
+
     const history = useHistory();
+
+    async function handleEnterRoom(e) {
+        e.preventDefault();
+
+        const roomRef = database.ref(`rooms/${room}`);
+
+        const enterRoom = await roomRef.get();
+
+        if (!enterRoom.exists()) {
+            // eslint-disable-next-line no-new
+            new Error('inexistent room');
+            return;
+        }
+
+        history.push(`/rooms/${room}`);
+    }
 
     async function redirectToNewRoom() {
         if (!user) await signInWithGoogle();
@@ -37,8 +56,8 @@ export function Home() {
                         <p>create an account with Google</p>
                     </button>
                     <p className="hint">or join some room</p>
-                    <form action="">
-                        <input type="text" name="roomId" placeholder="Type the room Id" aria-placeholder="Type the room Id" />
+                    <form onSubmit={(e) => handleEnterRoom(e)}>
+                        <input type="text" name="roomId" placeholder="Type the room Id" aria-placeholder="Type the room Id" onChange={(e) => setRoom(e.target.value)} />
                         <Button type="submit">join this room</Button>
                     </form>
                 </div>

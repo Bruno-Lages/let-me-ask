@@ -1,5 +1,6 @@
-import { React, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { React, useContext, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { database } from '../config/firebase';
 
 import { Button } from '../components/Button';
 
@@ -11,6 +12,23 @@ import { authContext } from '../contexts/authContext';
 
 export function NewRoom() {
     const { user } = useContext(authContext);
+
+    const history = useHistory();
+
+    const [room, setRoom] = useState('');
+
+    async function handleNewroom(e) {
+        e.preventDefault();
+        const roomRef = database.ref('rooms');
+
+        if (room.trim() !== '') {
+            const newRoom = await roomRef.push({
+                name: room,
+                authorId: user.id,
+            });
+            history.push(`/rooms/${newRoom.key}`);
+        }
+    }
 
     return (
         <div className="new-room">
@@ -24,8 +42,8 @@ export function NewRoom() {
                 <div className="room-container">
                     <img src={logo} alt="let me ask logo" />
                     <h1>{user.name}</h1>
-                    <form action="">
-                        <input type="text" name="roomName" placeholder="Create a name to your room" aria-placeholder="room name" />
+                    <form onSubmit={(e) => handleNewroom(e)}>
+                        <input type="text" name="roomName" placeholder="Create a name to your room" aria-placeholder="room name" onChange={(e) => setRoom(e.target.value)} />
                         <Button type="submit">Create room</Button>
                     </form>
                     <p className="join-room">
