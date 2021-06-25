@@ -1,0 +1,49 @@
+.question {
+    background-color: #fff;
+    border-radius: 10px;
+    resize: none;
+    padding: 1rem;
+    margin: 0 0 1rem 2%;
+    box-shadow: 0px 1px 0px 1px rgba(0, 0, 0, 0.3);
+}
+
+.question p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    text-align: left;
+}
+
+.question .user-info p{
+    color: #96969f;
+    font-weight: 400;
+    font-size: 0.9rem;
+}
+
+.question button {
+    border: none;
+    background-color:inherit;
+    font-size: inherit;
+    font-family: 'inherit';
+    font-weight: 700;
+    color: #96969f;
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+button {
+    transition: 0.5s;
+}
+
+button:hover {
+    filter: brightness(0.7);
+}
+
+.liked span{
+    color: #835afd;
+}
+
+.liked svg path{
+    stroke: #835afd;
+}

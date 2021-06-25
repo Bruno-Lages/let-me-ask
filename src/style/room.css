@@ -39,7 +39,7 @@ h2 {
     margin: 0 auto
 }
 
-.question {
+.new-question {
     max-width: 100%;
     border-radius: 10px;
     resize: none;
@@ -62,11 +62,12 @@ footer img {
 }
 
 .user-info {
-    height: 1.8rem;
+    height: 1.5rem;
     display: flex;
     color: #18181a;
     font-weight: 700;
     font-size: 0.9rem;
+    margin-left: 0.1rem;
 }
 
 .user-info p {
