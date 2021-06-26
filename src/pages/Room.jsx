@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
-import { useState, useContext } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useState, useContext, useEffect } from 'react';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { database } from '../config/firebase';
 
 import { authContext } from '../contexts/authContext';
@@ -18,6 +18,18 @@ export function Room() {
     const { user } = useContext(authContext);
     const roomId = useParams().id;
     const [newQuestion, setNewQuestion] = useState('');
+    const history = useHistory();
+
+    useEffect(async () => {
+        const roomData = await database.ref(`rooms/${roomId}`).get();
+        if (roomData.val().closedAt) {
+            alert('closed room');
+            history.push('/');
+        }
+        if (user.id === roomData.val().authorId) {
+            history.push(`/admin/rooms/${roomId}`);
+        }
+    }, [user.id]);
 
     const { questions, tittle } = useRoom(roomId);
 
@@ -40,7 +52,6 @@ export function Room() {
         e.preventDefault();
         clearTextArea();
         setNewQuestion('');
-        console.log(newQuestion);
 
         if (newQuestion.trim() === '') {
             new Error('empty question');

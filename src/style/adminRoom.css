@@ -1,0 +1,31 @@
+.buttons {
+    border-radius: 10px;
+    box-shadow: none;
+    cursor: pointer;
+    display: flex;
+    background-color: #fff;
+    height: 2.5rem;
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.buttons *{
+    margin: 0;
+}
+
+.close-room-button {
+    border-radius: 10px;
+    border: solid 2px #835afd;
+    color: #835afd;
+    box-shadow: none;
+    background-color: #fff;
+    height: 2.5rem;
+    overflow: hidden;
+    padding: 0 0.5rem 0 0.5rem;
+}
+
+.delete:hover path {
+    stroke: #eb6d84;
+}

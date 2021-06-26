@@ -21,17 +21,22 @@ export function Home() {
     async function handleEnterRoom(e) {
         e.preventDefault();
 
-        const roomRef = database.ref(`rooms/${room}`);
+        const roomRef = await database.ref(`rooms/${room}`).get();
 
-        const enterRoom = await roomRef.get();
-
-        if (!enterRoom.exists()) {
+        if (!roomRef.exists()) {
             // eslint-disable-next-line no-new
             new Error('inexistent room');
             return;
         }
 
-        history.push(`/rooms/${room}`);
+        if (roomRef.val().closedAt) {
+            // eslint-disable-next-line no-new
+            new Error('closed room');
+            return;
+        }
+
+        // eslint-disable-next-line no-unused-expressions
+        roomRef.val().authorId === user.id ? history.push(`/admin/rooms/${room}`) : history.push(`/rooms/${room}`);
     }
 
     async function redirectToNewRoom() {

@@ -25,7 +25,6 @@ export function useRoom(roomId) {
                     // eslint-disable-next-line max-len
                     likeId: Object.entries(value.likes ?? {}).find(([keyLike, like]) => like.authorId === user.id)?.[0],
                 }));
-            console.log(parsedQuestions);
 
             setQuestions(parsedQuestions);
             setTittle(databaseRoom.name);
