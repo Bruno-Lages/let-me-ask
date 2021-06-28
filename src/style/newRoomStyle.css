@@ -38,6 +38,10 @@ h1 {
     line-height: 2.1rem;
 }
 
+.new-room p {
+    font-family: 'Poppins', sans-serif;
+}
+
 form {
     margin: 0.5rem 0;
 }

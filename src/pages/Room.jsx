@@ -13,6 +13,7 @@ import { Question } from '../components/Question';
 
 import '../style/room.css';
 import logo from '../assets/logo.svg';
+import emptyQuestionsIcon from '../assets/empty-questions.svg';
 
 export function Room() {
     const { user } = useContext(authContext);
@@ -106,6 +107,15 @@ export function Room() {
                         <Button type="submit">Send a question</Button>
                     </footer>
                 </form>
+
+                {questions.length === 0
+                    ? (
+                        <div className="empty-room">
+                            <img src={emptyQuestionsIcon} alt="messages icon" />
+                            <h3>There&apos;s no questions yet</h3>
+                        </div>
+                    )
+                    : '' }
 
                 {questions.map(((question) => (
                     <Question

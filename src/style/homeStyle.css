@@ -43,6 +43,10 @@ h1 {
     line-height: 2.1rem;
 }
 
+.homepage p {
+    font-family: 'Poppins', sans-serif;
+}
+
 .home-button {
     display: flex;
     justify-content: space-between;
