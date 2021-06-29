@@ -16,7 +16,7 @@ import logo from '../assets/logo.svg';
 import emptyQuestionsIcon from '../assets/empty-questions.svg';
 
 export function Room() {
-    const { user } = useContext(authContext);
+    const { user, signOutWithGoogle } = useContext(authContext);
     const roomId = useParams().id;
     const [newQuestion, setNewQuestion] = useState('');
     const history = useHistory();
@@ -76,11 +76,17 @@ export function Room() {
         await database.ref(`rooms/${roomId}/questions`).push(question);
     }
 
+    async function signOut() {
+        await signOutWithGoogle();
+    }
+    console.log(user);
+
     return (
         <div>
             <header>
                 <img src={logo} alt="let me ask logo" />
                 <Copycode param={roomId} />
+                <Button type="button" onClick={signOut}>sair</Button>
             </header>
 
             <main>
@@ -122,6 +128,8 @@ export function Room() {
                         author={question.author}
                         content={question.content}
                         key={question.id}
+                        isHighlighted={question.isHighLighted}
+                        isAnswered={question.isAnswered}
                     >
                         <button type="button" aria-label="like" className={`like ${question.likeId ? 'liked' : ''}`} onClick={() => handleLike(question.id, question.likeId)}>
                             { question.likeCount > 0

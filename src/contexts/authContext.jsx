@@ -23,7 +23,7 @@ export function AuthContext(props) {
                 });
             }
         });
-    });
+    }, []);
 
     async function signInWithGoogle() {
         const provider = new firebase.auth.GoogleAuthProvider();
@@ -44,8 +44,13 @@ export function AuthContext(props) {
         }
     }
 
+    async function signOutWithGoogle() {
+        await auth.signOut();
+        setUser('');
+    }
+
     return (
-        <authContext.Provider value={{ user, signInWithGoogle }}>
+        <authContext.Provider value={{ user, signInWithGoogle, signOutWithGoogle }}>
             { /* eslint-disable-next-line react/destructuring-assignment */}
             {props.children}
         </authContext.Provider>
