@@ -9,7 +9,7 @@ export function AuthContext(props) {
     useEffect(() => {
     // eslint-disable-next-line no-shadow
         auth.onAuthStateChanged((user) => {
-            if (user) {
+            if (user && Object.keys(user).length !== 0) {
                 const { displayName, photoURL, uid } = user;
 
                 if (!displayName || !photoURL) {

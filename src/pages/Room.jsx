@@ -21,6 +21,11 @@ export function Room() {
     const [newQuestion, setNewQuestion] = useState('');
     const history = useHistory();
 
+    function turnButtonDisable() {
+        const button = document.querySelector('#submit-button');
+        if (Object.keys(user).length < 1) button.disabled = true;
+    }
+
     useEffect(async () => {
         const roomData = await database.ref(`rooms/${roomId}`).get();
         if (roomData.val().closedAt) {
@@ -30,6 +35,7 @@ export function Room() {
         if (user.id === roomData.val().authorId) {
             history.push(`/admin/rooms/${roomId}`);
         }
+        turnButtonDisable();
     }, [user.id]);
 
     const { questions, tittle } = useRoom(roomId);
@@ -42,10 +48,12 @@ export function Room() {
     async function handleLike(questionId, likeId) {
         if (likeId) {
             database.ref(`rooms/${roomId}/questions/${questionId}/likes/${likeId}`).remove();
-        } else {
+        } else if (Object.keys(user).length) {
             await database.ref(`rooms/${roomId}/questions/${questionId}/likes`).push({
                 authorId: user.id,
             });
+        } else {
+            new Error('you must be logged to like a question');
         }
     }
 
@@ -79,14 +87,15 @@ export function Room() {
     async function signOut() {
         await signOutWithGoogle();
     }
-    console.log(user);
 
     return (
         <div>
             <header>
                 <img src={logo} alt="let me ask logo" />
-                <Copycode param={roomId} />
-                <Button type="button" onClick={signOut}>sair</Button>
+                <div className="user-options">
+                    <Copycode param={roomId} />
+                    {Object.keys(user).length ? (<button type="button" className="sign-out" onClick={signOut}>sign out</button>) : ''}
+                </div>
             </header>
 
             <main>
@@ -99,7 +108,7 @@ export function Room() {
                 <form className="room-form" onSubmit={(e) => handleSendQuestion(e)}>
                     <textarea cols="1200" rows="6" className="new-question" placeholder="What do you want to ask?" aria-placeholder="What do you want to ask?" onChange={(e) => setNewQuestion(e.target.value)} />
                     <footer>
-                        {user ? (
+                        {Object.keys(user).length ? (
                             <div className="user-info">
                                 <img src={user.avatar} alt="user avatar" />
                                 <p>{user.name}</p>
@@ -110,7 +119,7 @@ export function Room() {
                                 <Link to="/">make a login</Link>
                             </p>
                         )}
-                        <Button type="submit">Send a question</Button>
+                        <Button id="submit-button" type="submit">Send a question</Button>
                     </footer>
                 </form>
 

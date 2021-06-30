@@ -10,6 +10,25 @@ header * {
     margin: 1.5rem;
 }
 
+.user-options {
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
+}
+
+.user-options .copy {
+    margin-right: 0.5rem;
+}
+
+.sign-out {
+    padding: 0.6rem;
+    border-radius: 7px;
+    border-style: none;
+    color: rgba(255, 255, 255, 0.89);
+    background-color: #835afd;
+    margin: 0;
+}
+
 main {
     width: 80%;
     max-width: 2000px;

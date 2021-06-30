@@ -40,7 +40,7 @@ export function Home() {
     }
 
     async function redirectToNewRoom() {
-        if (!user) await signInWithGoogle();
+        if (!user || Object.keys(user).length < 1) await signInWithGoogle();
         history.push('/newRoom');
     }
 

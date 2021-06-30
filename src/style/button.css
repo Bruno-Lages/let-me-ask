@@ -13,3 +13,8 @@
     margin: 0.5rem 0;
 }
 
+.button:disabled {
+    filter: brightness(0.55);
+    cursor: unset;
+}
+
