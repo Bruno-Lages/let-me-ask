@@ -1,6 +1,7 @@
 .new-room {
     height: 100vh;
     width: 100vw;
+    min-height: 600px;
     display: flex;
 }
 
@@ -16,6 +17,12 @@ aside {
 
 aside * {
     margin-left: 2rem;
+}
+
+@media screen and (max-width: 900px) {
+    aside {
+        display: none;
+    }
 }
 
 .new-room-main {
@@ -40,6 +47,8 @@ h1 {
 
 .new-room p {
     font-family: 'Poppins', sans-serif;
+    display: inline;
+    text-align: left;
 }
 
 form {
@@ -62,4 +71,16 @@ a {
     font-family:inherit;
     color: #835afd;
     margin-left: 0.2rem;
+    display: inline;
 }
+
+@media screen and (max-width: 900px) {
+    .room-container {
+        margin: 0 5%;
+    }
+
+    .room-container img {
+        padding: 0 10% ;
+    }
+}
+
