@@ -26,3 +26,17 @@
     padding: 0 0.5rem 0 0.5rem;
 }
 
+@media screen and (max-width: 350px) {
+    .titles {
+        flex-direction: column;
+    }
+
+    .room-name {
+        margin-bottom: 0.5rem;
+    }
+
+    h2 {
+        margin-left: 0;
+        margin-bottom: 0.5rem;
+    }
+}

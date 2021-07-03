@@ -29,6 +29,21 @@ header * {
     margin: 0;
 }
 
+
+@media screen and (max-width: 900px){
+    .logo {
+        margin: 0;
+        padding: 1.5rem 0;
+    }
+}
+
+@media screen and (max-width: 340px) {
+    .logo {
+        padding: 0;
+        width: 25%;
+        margin-left: 10%;
+    }
+}
 main {
     width: 80%;
     max-width: 2000px;
@@ -36,6 +51,11 @@ main {
     min-height: 80vh;
 }
 
+@media screen and (max-width: 900px) {
+    main {
+        width: 90%;
+    }
+}
 .empty-room {
     display: flex;
     flex-direction: column;
@@ -74,8 +94,28 @@ h3 {
     text-align: center;
 }
 
+@media screen and (max-width: 300px) {
+    .titles {
+        flex-direction: column;
+    }
+
+    .room-name {
+        margin-bottom: 0.5rem;
+    }
+
+    h2 {
+        margin-left: 0;
+        margin-bottom: 0.5rem;
+    }
+}
+
 .room-form {
     margin: 0 auto;
+}
+
+.room-form p {
+    display: inline;
+    text-align: left;
 }
 
 .new-question {
@@ -99,6 +139,7 @@ footer {
 footer img {
     border-radius: 50%;
 }
+
 
 .user-info {
     height: 1.5rem;
@@ -126,4 +167,19 @@ p {
 
 footer .button {
     width: 10rem;
+}
+
+@media screen and (max-width: 900px) {
+    .form-footer {
+        flex-direction: column;
+    }
+
+    .form-footer .button {
+        align-self: flex-end;
+    }
+
+    .user-info-form img {
+        height: 100%;
+    }
+    
 }

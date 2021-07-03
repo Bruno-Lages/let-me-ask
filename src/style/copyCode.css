@@ -4,7 +4,7 @@
     box-shadow: none;
     cursor: pointer;
     display: flex;
-    background-color: #fff;
+    background-color: #835afd;
     height: 2.5rem;
     overflow: hidden;
 }
@@ -13,7 +13,6 @@
 }
 
 .copyIcon {
-    background-color: #835afd;
     display: flex;
     justify-items: center;
     align-content: center;
@@ -23,6 +22,19 @@
 
 .code {
     display: block;
+    background-color: #fff;
     align-self: center;
     padding: 0 0.5rem 0 0.5rem;
+    height: 100%;
+    line-height: 2.2rem;
+}
+
+@media screen and (max-width: 530px) {
+    .code {
+        display: none;
+    }
+
+    .copyIcon img {
+        padding: 0;
+    }
 }

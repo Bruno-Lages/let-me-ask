@@ -91,7 +91,7 @@ export function Room() {
     return (
         <div>
             <header>
-                <img src={logo} alt="let me ask logo" />
+                <img src={logo} alt="let me ask logo" className="logo" />
                 <div className="user-options">
                     <Copycode param={roomId} />
                     {Object.keys(user).length ? (<button type="button" className="sign-out" onClick={signOut}>sign out</button>) : ''}
@@ -107,9 +107,9 @@ export function Room() {
                 </div>
                 <form className="room-form" onSubmit={(e) => handleSendQuestion(e)}>
                     <textarea cols="1200" rows="6" className="new-question" placeholder="What do you want to ask?" aria-placeholder="What do you want to ask?" onChange={(e) => setNewQuestion(e.target.value)} />
-                    <footer>
+                    <footer className="form-footer">
                         {Object.keys(user).length ? (
-                            <div className="user-info">
+                            <div className="user-info user-info-form">
                                 <img src={user.avatar} alt="user avatar" />
                                 <p>{user.name}</p>
                             </div>

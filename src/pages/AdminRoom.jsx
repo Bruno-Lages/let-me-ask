@@ -70,7 +70,7 @@ export function AdminRoom() {
     return (
         <div>
             <header>
-                <img src={logo} alt="let me ask logo" />
+                <img src={logo} alt="let me ask logo" className="logo" />
                 <div className="buttons">
                     <Copycode param={roomId} />
                     <button type="button" className="close-room-button" onClick={() => handleCloseRoom()}>Close room</button>

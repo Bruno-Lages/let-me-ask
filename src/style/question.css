@@ -69,3 +69,13 @@ button:hover {
 .answered {
     background-color: #dbdcdd;
 }
+
+@media screen and (max-width: 300px) {
+    .question {
+        padding: 0.5rem;
+    }
+
+    .button-options {
+        gap: 1px;
+    }
+}
