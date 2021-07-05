@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-globals */
 import { useContext, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import { FaEllipsisV, FaMoon } from 'react-icons/fa';
 import { database } from '../config/firebase';
 
 import { authContext } from '../contexts/authContext';
@@ -10,17 +11,25 @@ import { useRoom } from '../hooks/useRoom';
 import { Copycode } from '../components/CopyCode';
 import { Question } from '../components/Question';
 
-import '../style/adminRoom.css';
 import logo from '../assets/logo.svg';
 import emptyQuestionsIcon from '../assets/empty-questions.svg';
 
 export function AdminRoom() {
     // eslint-disable-next-line no-unused-vars
-    const { user } = useContext(authContext);
+    const { user, signOutWithGoogle } = useContext(authContext);
     const roomId = useParams().id;
     const history = useHistory();
 
     const { questions, tittle } = useRoom(roomId);
+
+    async function signOut() {
+        await signOutWithGoogle();
+    }
+
+    function handleMenu() {
+        const menu = document.querySelector('.options-menu');
+        menu.classList.toggle('activated');
+    }
 
     useEffect(async () => {
         const roomData = await database.ref(`rooms/${roomId}`).get();
@@ -71,11 +80,40 @@ export function AdminRoom() {
         <div>
             <header>
                 <img src={logo} alt="let me ask logo" className="logo" />
-                <div className="buttons">
+                <div className="user-options">
                     <Copycode param={roomId} />
-                    <button type="button" className="close-room-button" onClick={() => handleCloseRoom()}>Close room</button>
+                    <button type="button" aria-label="dark-mode-button" className="dark-mode-button"><FaMoon size={20} color="#212035" /></button>
+                    {Object.keys(user).length ? (
+                        <button type="button" aria-label="more options icon" className="three-dots"><FaEllipsisV size={20} color="#212035" onClick={() => handleMenu()} /></button>
+                    ) : ''}
                 </div>
             </header>
+
+            <nav className="options-menu">
+                <ul>
+                    <li>
+                        <button
+                            type="button"
+                            className="close-room-button"
+                            onClick={() => handleCloseRoom()}
+                        >
+                            Close room
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            type="button"
+                            className="sign-out"
+                            onClick={() => {
+                                signOut();
+                                handleMenu();
+                            }}
+                        >
+                            Sign out
+                        </button>
+                    </li>
+                </ul>
+            </nav>
 
             <main>
                 <div className="titles">

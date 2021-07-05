@@ -1,6 +1,7 @@
 /* eslint-disable no-new */
 import { useState, useContext, useEffect } from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import { FaEllipsisV, FaMoon } from 'react-icons/fa';
 import { database } from '../config/firebase';
 
 import { authContext } from '../contexts/authContext';
@@ -16,15 +17,10 @@ import logo from '../assets/logo.svg';
 import emptyQuestionsIcon from '../assets/empty-questions.svg';
 
 export function Room() {
-    const { user, signOutWithGoogle } = useContext(authContext);
+    const { user, signOutWithGoogle, signInWithGoogle } = useContext(authContext);
     const roomId = useParams().id;
     const [newQuestion, setNewQuestion] = useState('');
     const history = useHistory();
-
-    function turnButtonDisable() {
-        const button = document.querySelector('#submit-button');
-        if (Object.keys(user).length < 1) button.disabled = true;
-    }
 
     useEffect(async () => {
         const roomData = await database.ref(`rooms/${roomId}`).get();
@@ -35,7 +31,6 @@ export function Room() {
         if (user.id === roomData.val().authorId) {
             history.push(`/admin/rooms/${roomId}`);
         }
-        turnButtonDisable();
     }, [user.id]);
 
     const { questions, tittle } = useRoom(roomId);
@@ -43,6 +38,11 @@ export function Room() {
     function clearTextArea() {
         const textArea = document.querySelector('.new-question');
         textArea.value = '';
+    }
+
+    function handleMenu() {
+        const menu = document.querySelector('.options-menu');
+        menu.classList.toggle('activated');
     }
 
     async function handleLike(questionId, likeId) {
@@ -94,9 +94,28 @@ export function Room() {
                 <img src={logo} alt="let me ask logo" className="logo" />
                 <div className="user-options">
                     <Copycode param={roomId} />
-                    {Object.keys(user).length ? (<button type="button" className="sign-out" onClick={signOut}>sign out</button>) : ''}
+                    <button type="button" aria-label="dark-mode-button" className="dark-mode-button"><FaMoon size={20} color="#212035" /></button>
+                    {Object.keys(user).length ? (
+                        <button type="button" aria-label="more options icon" className="three-dots"><FaEllipsisV size={20} color="#212035" onClick={() => handleMenu()} /></button>
+                    ) : ''}
                 </div>
             </header>
+            <nav className="options-menu">
+                <ul>
+                    <li>
+                        <button
+                            type="button"
+                            className="sign-out"
+                            onClick={() => {
+                                signOut();
+                                handleMenu();
+                            }}
+                        >
+                            Sign out
+                        </button>
+                    </li>
+                </ul>
+            </nav>
 
             <main>
                 <div className="titles">
@@ -116,10 +135,11 @@ export function Room() {
                         ) : (
                             <p className="hint">
                                 To send a question,
-                                <Link to="/">make a login</Link>
+                                {' '}
+                                <button type="button" className="a-button" onClick={() => signInWithGoogle()}>make a login</button>
                             </p>
                         )}
-                        <Button id="submit-button" type="submit">Send a question</Button>
+                        { Object.keys(user).length ? (<Button id="submit-button" type="submit">Send a question</Button>) : (<Button id="submit-button" type="submit" disabled>Send a question</Button>) }
                     </footer>
                 </form>
 
