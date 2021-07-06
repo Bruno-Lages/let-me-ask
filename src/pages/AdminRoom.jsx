@@ -3,6 +3,8 @@ import { useContext, useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { FaEllipsisV, FaMoon } from 'react-icons/fa';
 import Modal from 'react-modal';
+import ClipLoader from 'react-spinners/ClipLoader';
+
 import { database } from '../config/firebase';
 
 import { authContext } from '../contexts/authContext';
@@ -17,7 +19,9 @@ import emptyQuestionsIcon from '../assets/empty-questions.svg';
 
 export function AdminRoom() {
     // eslint-disable-next-line no-unused-vars
-    const { user, signOutWithGoogle } = useContext(authContext);
+    const {
+        user, signOutWithGoogle, setIsLoading, isLoading,
+    } = useContext(authContext);
     const roomId = useParams().id;
     const history = useHistory();
     const [signOutModal, toggleSignOutModal] = useState(false);
@@ -27,6 +31,11 @@ export function AdminRoom() {
     Modal.setAppElement('#root');
 
     const { questions, tittle } = useRoom(roomId);
+
+    function clearLoadingOverlay() {
+        const menu = document.querySelector('.spinner-overlay');
+        menu.classList.add('disactivated');
+    }
 
     async function signOut() {
         await signOutWithGoogle();
@@ -43,6 +52,10 @@ export function AdminRoom() {
             if (user.id !== roomData.val().authorId) {
                 history.push(`/rooms/${roomId}`);
             }
+            setTimeout(() => {
+                setIsLoading(false);
+                clearLoadingOverlay();
+            }, 600);
         }
 
         return Checkuser();
@@ -84,6 +97,11 @@ export function AdminRoom() {
 
     return (
         <div>
+
+            <div className="spinner-overlay">
+                <ClipLoader size={100} className="modal" loading={isLoading} speedMultiplier={1} color="#835afd" />
+            </div>
+
             <header>
                 <img src={logo} alt="let me ask logo" className="logo" />
                 <div className="user-options">
@@ -195,43 +213,41 @@ export function AdminRoom() {
                             <p>Send the room code to your friends and start to reply!</p>
                         </div>
                     )
-                    : '' }
-
-                {questions.map(((question) => (
-                    <Question
-                        author={question.author}
-                        content={question.content}
-                        key={question.id}
-                        isHighlighted={question.isHighLighted}
-                        isAnswered={question.isAnswered}
-                    >
-                        <button type="button" className="answer-button" aria-label="check question as answered button" onClick={() => handleCheckQuestionAsAnswered(question.id)}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="12.0003" cy="11.9998" r="9.00375" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                <path d="M8.44287 12.3391L10.6108 14.507L10.5968 14.493L15.4878 9.60193" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </button>
-                        <button type="button" className="highlight-button" aria-label="highlight button" onClick={() => handleHighlightQuestion(question.id)}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fillRule="evenodd" clipRule="evenodd" d="M12 17.9999H18C19.657 17.9999 21 16.6569 21 14.9999V6.99988C21 5.34288 19.657 3.99988 18 3.99988H6C4.343 3.99988 3 5.34288 3 6.99988V14.9999C3 16.6569 4.343 17.9999 6 17.9999H7.5V20.9999L12 17.9999Z" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </button>
-                        <button
-                            type="button"
-                            className="delete-button"
-                            aria-label="delete button"
-                            onClick={() => {
-                                setDeletedQuestion(question.id);
-                                toggleRemoveCommentRoomModal(true);
-                            }}
+                    : (questions.map((question) => (
+                        <Question
+                            author={question.author}
+                            content={question.content}
+                            key={question.id}
+                            isHighlighted={question.isHighLighted}
+                            isAnswered={question.isAnswered}
                         >
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="delete">
-                                <path d="M3 5.99988H5H21" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                <path d="M8 5.99988V3.99988C8 3.46944 8.21071 2.96074 8.58579 2.58566C8.96086 2.21059 9.46957 1.99988 10 1.99988H14C14.5304 1.99988 15.0391 2.21059 15.4142 2.58566C15.7893 2.96074 16 3.46944 16 3.99988V5.99988M19 5.99988V19.9999C19 20.5303 18.7893 21.039 18.4142 21.4141C18.0391 21.7892 17.5304 21.9999 17 21.9999H7C6.46957 21.9999 5.96086 21.7892 5.58579 21.4141C5.21071 21.039 5 20.5303 5 19.9999V5.99988H19Z" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </button>
-                    </Question>
-                )))}
+                            <button type="button" className="answer-button" aria-label="check question as answered button" onClick={() => handleCheckQuestionAsAnswered(question.id)}>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12.0003" cy="11.9998" r="9.00375" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M8.44287 12.3391L10.6108 14.507L10.5968 14.493L15.4878 9.60193" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </button>
+                            <button type="button" className="highlight-button" aria-label="highlight button" onClick={() => handleHighlightQuestion(question.id)}>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fillRule="evenodd" clipRule="evenodd" d="M12 17.9999H18C19.657 17.9999 21 16.6569 21 14.9999V6.99988C21 5.34288 19.657 3.99988 18 3.99988H6C4.343 3.99988 3 5.34288 3 6.99988V14.9999C3 16.6569 4.343 17.9999 6 17.9999H7.5V20.9999L12 17.9999Z" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </button>
+                            <button
+                                type="button"
+                                className="delete-button"
+                                aria-label="delete button"
+                                onClick={() => {
+                                    setDeletedQuestion(question.id);
+                                    toggleRemoveCommentRoomModal(true);
+                                }}
+                            >
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="delete">
+                                    <path d="M3 5.99988H5H21" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M8 5.99988V3.99988C8 3.46944 8.21071 2.96074 8.58579 2.58566C8.96086 2.21059 9.46957 1.99988 10 1.99988H14C14.5304 1.99988 15.0391 2.21059 15.4142 2.58566C15.7893 2.96074 16 3.46944 16 3.99988V5.99988M19 5.99988V19.9999C19 20.5303 18.7893 21.039 18.4142 21.4141C18.0391 21.7892 17.5304 21.9999 17 21.9999H7C6.46957 21.9999 5.96086 21.7892 5.58579 21.4141C5.21071 21.039 5 20.5303 5 19.9999V5.99988H19Z" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </button>
+                        </Question>
+                    )))}
             </main>
         </div>
     );

@@ -3,6 +3,7 @@ import { useState, useContext, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { FaEllipsisV, FaMoon } from 'react-icons/fa';
 import Modal from 'react-modal';
+import ClipLoader from 'react-spinners/ClipLoader';
 import { database } from '../config/firebase';
 
 import { authContext } from '../contexts/authContext';
@@ -18,12 +19,19 @@ import logo from '../assets/logo.svg';
 import emptyQuestionsIcon from '../assets/empty-questions.svg';
 
 export function Room() {
-    const { user, signOutWithGoogle, signInWithGoogle } = useContext(authContext);
+    const {
+        user, signOutWithGoogle, signInWithGoogle, setIsLoading, isLoading,
+    } = useContext(authContext);
     const roomId = useParams().id;
     const [newQuestion, setNewQuestion] = useState('');
     const [modal, toggleModal] = useState(false);
     Modal.setAppElement('#root');
     const history = useHistory();
+
+    function clearLoadingOverlay() {
+        const menu = document.querySelector('.spinner-overlay');
+        menu.classList.add('disactivated');
+    }
 
     useEffect(async () => {
         const roomData = await database.ref(`rooms/${roomId}`).get();
@@ -34,6 +42,10 @@ export function Room() {
         if (user.id === roomData.val().authorId) {
             history.push(`/admin/rooms/${roomId}`);
         }
+        setTimeout(() => {
+            setIsLoading(false);
+            clearLoadingOverlay();
+        }, 600);
     }, [user.id]);
 
     const { questions, tittle } = useRoom(roomId);
@@ -93,6 +105,11 @@ export function Room() {
 
     return (
         <div>
+
+            <div className="spinner-overlay">
+                <ClipLoader size={100} className="modal" loading={isLoading} speedMultiplier={1} color="#835afd" />
+            </div>
+
             <header>
                 <img src={logo} alt="let me ask logo" className="logo" />
                 <div className="user-options">

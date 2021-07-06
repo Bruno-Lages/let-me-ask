@@ -5,6 +5,7 @@ import { auth, firebase } from '../config/firebase';
 export const authContext = createContext({});
 export function AuthContext(props) {
     const [user, setUser] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
     // eslint-disable-next-line no-shadow
@@ -50,7 +51,10 @@ export function AuthContext(props) {
     }
 
     return (
-        <authContext.Provider value={{ user, signInWithGoogle, signOutWithGoogle }}>
+        <authContext.Provider value={{
+            user, signInWithGoogle, signOutWithGoogle, isLoading, setIsLoading,
+        }}
+        >
             { /* eslint-disable-next-line react/destructuring-assignment */}
             {props.children}
         </authContext.Provider>
