@@ -45,6 +45,10 @@
     stroke: #eb6d84;
 }
 
+.delete-svg path {
+    stroke: #e73f5d;
+}
+
 button {
     transition: 0.5s;
 }

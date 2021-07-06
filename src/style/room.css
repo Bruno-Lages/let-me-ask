@@ -6,6 +6,10 @@ header {
     box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
+.spinner {
+    background-color: #e73f5d;
+}
+
 header * {
     margin: 1.5rem;
 }
@@ -92,7 +96,69 @@ li:hover {
     background-color: transparent;
 }
 
+.overlay {
+    background-color: #24292ebd;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+.modal {
+    width: 45vw;
+    min-width: max-content;
+    height: 30vh;
+    min-height: 8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 10px;
+    inset: 40px; 
+    border: 1px solid rgb(204, 204, 204); 
+    background: rgb(255, 255, 255); 
+    border-radius: 4px; 
+    padding: 20px;
+}
+
+.buttons-options {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    gap: 20%;
+}
+
+.cancel-button {
+    padding: 0.6rem;
+    border-radius: 7px;
+    border-style: none;
+    outline: none;
+    font-size: 1rem;
+    color: #80808c;
+    background-color: #dbdcdd;
+    margin: 0.5rem 0;
+    font-family: 'Poppins', sans-serif;
+    width: 35%;
+}
+
+.confirm-button {
+    padding: 0.6rem;
+    border-radius: 7px;
+    border-style: none;
+    outline: none;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #e73f5d;
+    margin: 0.5rem 0;
+    font-family: 'Poppins', sans-serif;
+    width: 35%;
+}
 
 @media screen and (max-width: 900px){
     .logo {

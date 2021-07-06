@@ -2,6 +2,7 @@
 import { useState, useContext, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { FaEllipsisV, FaMoon } from 'react-icons/fa';
+import Modal from 'react-modal';
 import { database } from '../config/firebase';
 
 import { authContext } from '../contexts/authContext';
@@ -20,6 +21,8 @@ export function Room() {
     const { user, signOutWithGoogle, signInWithGoogle } = useContext(authContext);
     const roomId = useParams().id;
     const [newQuestion, setNewQuestion] = useState('');
+    const [modal, toggleModal] = useState(false);
+    Modal.setAppElement('#root');
     const history = useHistory();
 
     useEffect(async () => {
@@ -100,6 +103,25 @@ export function Room() {
                     ) : ''}
                 </div>
             </header>
+
+            <Modal isOpen={modal} shouldCloseOnOverlayClick ontentLabel="Sign out confirmation" overlayClassName="overlay" className="modal">
+                <h3>Sign out</h3>
+                <span className="hint">Are you sure you want to exit?</span>
+                <div className="buttons-options">
+                    <button type="button" className="cancel-button" onClick={() => toggleModal(false)}>cancel</button>
+                    <button
+                        type="button"
+                        className="confirm-button"
+                        onClick={() => {
+                            signOut();
+                            toggleModal(false);
+                        }}
+                    >
+                        Exit
+                    </button>
+                </div>
+            </Modal>
+
             <nav className="options-menu">
                 <ul>
                     <li>
@@ -107,7 +129,7 @@ export function Room() {
                             type="button"
                             className="sign-out"
                             onClick={() => {
-                                signOut();
+                                toggleModal(true);
                                 handleMenu();
                             }}
                         >
