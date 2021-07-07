@@ -2,12 +2,23 @@
 import '../style/question.css';
 import classNames from 'classnames';
 
-// eslint-disable-next-line no-unused-vars
+import { useContext } from 'react';
+import { authContext } from '../contexts/authContext';
+
 export function Question({
     author, content, children, isHighlighted = false, isAnswered = false,
 }) {
+    const { darkMode } = useContext(authContext);
     return (
-        <div className={classNames('question', { answered: isAnswered }, { highlighted: isHighlighted })}>
+        <div className={classNames(
+            'question',
+            { answered: isAnswered },
+            { highlighted: isHighlighted },
+            { darkHighlighted: darkMode && isHighlighted },
+            { darkAnswered: darkMode && isAnswered },
+            { dark: darkMode && !isHighlighted && !isAnswered },
+        )}
+        >
             <p>{content}</p>
             <footer>
                 <div className="user-info">

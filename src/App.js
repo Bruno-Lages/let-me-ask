@@ -8,6 +8,7 @@ import { Room } from './pages/Room';
 import { AdminRoom } from './pages/AdminRoom';
 
 import './style/globalStyle.css';
+import './style/darkMode.css';
 
 function App() {
     return (

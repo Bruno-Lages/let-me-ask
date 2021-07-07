@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable no-new */
 import { useState, useContext, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
@@ -16,11 +17,13 @@ import { Question } from '../components/Question';
 
 import '../style/room.css';
 import logo from '../assets/logo.svg';
+import darkModeLogo from '../assets/dark-mode-logo.svg';
 import emptyQuestionsIcon from '../assets/empty-questions.svg';
 
 export function Room() {
     const {
-        user, signOutWithGoogle, signInWithGoogle, setIsLoading, isLoading,
+        user, signOutWithGoogle, signInWithGoogle, setIsLoading, isLoading, darkMode,
+        setDarkMode,
     } = useContext(authContext);
     const roomId = useParams().id;
     const [newQuestion, setNewQuestion] = useState('');
@@ -31,6 +34,15 @@ export function Room() {
     function clearLoadingOverlay() {
         const menu = document.querySelector('.spinner-overlay');
         menu.classList.add('disactivated');
+    }
+
+    function checkDarkMode() {
+        const { body } = document;
+        const textInput = document.querySelector('.new-question');
+        const header = document.querySelector('header');
+        darkMode ? body.classList.add('dark-body') : body.classList.remove('dark-body');
+        darkMode ? textInput?.classList.add('dark-text-area') : textInput?.classList.remove('dark-text-area');
+        darkMode ? header.classList.add('dark-header') : header.classList.remove('dark-header');
     }
 
     useEffect(async () => {
@@ -46,7 +58,8 @@ export function Room() {
             setIsLoading(false);
             clearLoadingOverlay();
         }, 600);
-    }, [user.id]);
+        checkDarkMode();
+    }, [user.id, darkMode]);
 
     const { questions, tittle } = useRoom(roomId);
 
@@ -111,12 +124,21 @@ export function Room() {
             </div>
 
             <header>
-                <img src={logo} alt="let me ask logo" className="logo" />
+                <img src={darkMode ? darkModeLogo : logo} alt="let me ask logo" className="logo" />
                 <div className="user-options">
                     <Copycode param={roomId} />
-                    <button type="button" aria-label="dark-mode-button" className="dark-mode-button"><FaMoon size={20} color="#212035" /></button>
+                    <button
+                        type="button"
+                        aria-label="dark-mode-button"
+                        className="dark-mode-button"
+                        onClick={() => {
+                            setDarkMode(!darkMode);
+                        }}
+                    >
+                        <FaMoon size={20} color={`${darkMode ? '#835afd52' : '#212035'}`} />
+                    </button>
                     {Object.keys(user).length ? (
-                        <button type="button" aria-label="more options icon" className="three-dots"><FaEllipsisV size={20} color="#212035" onClick={() => handleMenu()} /></button>
+                        <button type="button" aria-label="more options icon" className="three-dots"><FaEllipsisV size={20} color={`${darkMode ? '#835afd52' : '#212035'}`} onClick={() => handleMenu()} /></button>
                     ) : ''}
                 </div>
             </header>
@@ -199,7 +221,7 @@ export function Room() {
                         isHighlighted={question.isHighLighted}
                         isAnswered={question.isAnswered}
                     >
-                        <button type="button" aria-label="like" className={`like ${question.likeId ? 'liked' : ''}`} onClick={() => handleLike(question.id, question.likeId)}>
+                        <button type="button" aria-label="like" className={`like ${question.likeId ? 'liked' : ''} ${darkMode ? 'dark-icon' : ''}`} onClick={() => handleLike(question.id, question.likeId)}>
                             { question.likeCount > 0
                                 ? (
                                     <span>

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable no-restricted-globals */
 import { useContext, useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
@@ -15,12 +16,14 @@ import { Copycode } from '../components/CopyCode';
 import { Question } from '../components/Question';
 
 import logo from '../assets/logo.svg';
+import darkModeLogo from '../assets/dark-mode-logo.svg';
 import emptyQuestionsIcon from '../assets/empty-questions.svg';
 
 export function AdminRoom() {
     // eslint-disable-next-line no-unused-vars
     const {
-        user, signOutWithGoogle, setIsLoading, isLoading,
+        user, signOutWithGoogle, setIsLoading, isLoading, darkMode,
+        setDarkMode,
     } = useContext(authContext);
     const roomId = useParams().id;
     const history = useHistory();
@@ -46,6 +49,15 @@ export function AdminRoom() {
         menu.classList.toggle('activated');
     }
 
+    function checkDarkMode() {
+        const { body } = document;
+        const textInput = document.querySelector('.new-question');
+        const header = document.querySelector('header');
+        darkMode ? body.classList.add('dark-body') : body.classList.remove('dark-body');
+        darkMode ? textInput?.classList.add('dark-text-area') : textInput?.classList.remove('dark-text-area');
+        darkMode ? header.classList.add('dark-header') : header.classList.remove('dark-header');
+    }
+
     useEffect(() => {
         async function Checkuser() {
             const roomData = await database.ref(`rooms/${roomId}`).get();
@@ -56,10 +68,11 @@ export function AdminRoom() {
                 setIsLoading(false);
                 clearLoadingOverlay();
             }, 600);
+            checkDarkMode();
         }
 
         return Checkuser();
-    }, [user.id]);
+    }, [user.id, darkMode]);
 
     async function handleCloseRoom() {
         await database.ref(`rooms/${roomId}`).update({
@@ -103,12 +116,19 @@ export function AdminRoom() {
             </div>
 
             <header>
-                <img src={logo} alt="let me ask logo" className="logo" />
+                <img src={darkMode ? darkModeLogo : logo} alt="let me ask logo" className="logo" />
                 <div className="user-options">
                     <Copycode param={roomId} />
-                    <button type="button" aria-label="dark-mode-button" className="dark-mode-button"><FaMoon size={20} color="#212035" /></button>
+                    <button
+                        type="button"
+                        aria-label="dark-mode-button"
+                        className="dark-mode-button"
+                        onClick={() => setDarkMode(!darkMode)}
+                    >
+                        <FaMoon size={20} color={`${darkMode ? '#835afd52' : '#212035'}`} />
+                    </button>
                     {Object.keys(user).length ? (
-                        <button type="button" aria-label="more options icon" className="three-dots"><FaEllipsisV size={20} color="#212035" onClick={() => handleMenu()} /></button>
+                        <button type="button" aria-label="more options icon" className="three-dots"><FaEllipsisV size={20} color={`${darkMode ? '#835afd52' : '#212035'}`} onClick={() => handleMenu()} /></button>
                     ) : ''}
                 </div>
             </header>

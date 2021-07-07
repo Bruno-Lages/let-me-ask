@@ -128,7 +128,7 @@ li:hover {
 
 .modal {
     width: 45vw;
-    min-width: max-content;
+    min-width: fit-content;
     height: 30vh;
     min-height: 8rem;
     display: flex;
@@ -162,6 +162,7 @@ li:hover {
     margin: 0.5rem 0;
     font-family: 'Poppins', sans-serif;
     width: 35%;
+    min-width: max-content;
 }
 
 .confirm-button {
@@ -175,6 +176,7 @@ li:hover {
     margin: 0.5rem 0;
     font-family: 'Poppins', sans-serif;
     width: 35%;
+    min-width: max-content;
 }
 
 @media screen and (max-width: 900px){
@@ -271,6 +273,10 @@ h3 {
     resize: none;
     font-size: 1rem;
     padding: 1rem;
+}
+
+textarea:focus-visible {
+    outline: none;
 }
 
 .room-name {
