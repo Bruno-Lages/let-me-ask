@@ -3,7 +3,7 @@
     color: #8b949e;
 }
 
-.darkAnswered {
+.darkAnswered, .dark-body .response {
     background-color: #231f31;
 }
 
@@ -15,10 +15,13 @@
     background-color: #0d1117;
 }
 
-.dark-text-area {
+.dark-text-area, .dark-body .response-form {
     background-color: #060a0f;
-    color: #8b949e;
     border-color: #30363d;
+}
+
+.dark-body textarea {
+    color: #8b949e;
 }
 
 
@@ -37,6 +40,10 @@
 .dark-body h2 {
     background-color: #e559f991;
     color: #d5d5d5;
+}
+
+.dark-body h1 {
+    color: #7e56ec;
 }
 
 .dark-body .code {

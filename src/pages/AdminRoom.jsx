@@ -3,6 +3,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { FaEllipsisV, FaMoon } from 'react-icons/fa';
+import { HiOutlineSparkles } from 'react-icons/hi';
 import Modal from 'react-modal';
 import ClipLoader from 'react-spinners/ClipLoader';
 
@@ -98,9 +99,16 @@ export function AdminRoom() {
     }
 
     async function handleHighlightQuestion(questionId) {
+        const questionData = await database.ref(`rooms/${roomId}/questions/${questionId}`).get();
         const questionRef = await database.ref(`rooms/${roomId}/questions/${questionId}`);
+        if (questionData.val().isHighLighted === false) {
+            await questionRef.update({
+                isHighLighted: true,
+            });
+            return;
+        }
         await questionRef.update({
-            isHighLighted: true,
+            isHighLighted: false,
         });
     }
 
@@ -108,10 +116,51 @@ export function AdminRoom() {
         await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
     }
 
+    async function handleComment(comment, questionId) {
+        await database.ref(`rooms/${roomId}/questions/${questionId}/responses`).push({ comment });
+    }
+
+    function createSubmiticon() {
+        const svg = '<svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="1.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg"><path d="M476.59 227.05l-.16-.07L49.35 49.84A23.56 23.56 0 0027.14 52 24.65 24.65 0 0016 72.59v113.29a24 24 0 0019.52 23.57l232.93 43.07a4 4 0 010 7.86L35.53 303.45A24 24 0 0016 327v113.31A23.57 23.57 0 0026.59 460a23.94 23.94 0 0013.22 4 24.55 24.55 0 009.52-1.93L476.4 285.94l.19-.09a32 32 0 000-58.8z" /></svg>';
+        return svg;
+    }
+
+    function createForm() {
+        const form = document.createElement('form');
+        form.setAttribute('class', 'response-form');
+        const textArea = document.createElement('textarea');
+        textArea.setAttribute('placeHolder', 'Send a response');
+        textArea.setAttribute('ariaLabel', 'Send a response');
+        const submitButton = document.createElement('button');
+        submitButton.setAttribute('type', 'submit');
+        submitButton.setAttribute('class', 'send-button');
+        const svg = createSubmiticon();
+        submitButton.innerHTML = svg;
+        form.appendChild(textArea);
+        form.appendChild(submitButton);
+        return form;
+    }
+
+    function handleCommentSection(questionId) {
+        const main = document.querySelector('main');
+        const question = document.querySelector(`#${questionId}`);
+        if (question.nextElementSibling === null || question.nextElementSibling.tagName === 'DIV') {
+            const comment = createForm();
+            main.insertBefore(comment, question.nextElementSibling);
+            comment.addEventListener('submit', (e) => {
+                e.preventDefault();
+                handleComment(e.target.firstElementChild.value, questionId);
+                handleCommentSection(questionId);
+            });
+            return;
+        }
+        main.removeChild(question.nextElementSibling);
+    }
+
     return (
         <div>
 
-            <div className="spinner-overlay">
+            <div className="spinner-overlay" aria-hidden="true">
                 <ClipLoader size={100} className="modal" loading={isLoading} speedMultiplier={1} color="#835afd" />
             </div>
 
@@ -133,7 +182,7 @@ export function AdminRoom() {
                 </div>
             </header>
 
-            <Modal isOpen={closeRoomModal} ontentLabel="Close room confirmation" overlayClassName="overlay" className="modal">
+            <Modal isOpen={closeRoomModal} ontentLabel="Close room confirmation" overlayClassName="overlay" className="modal" aria-hidden="true">
                 <h3>Close room?</h3>
                 <span className="hint">Are you sure you want to close this room? You won&apos;t be able to reopen later</span>
                 <div className="buttons-options">
@@ -151,7 +200,7 @@ export function AdminRoom() {
                 </div>
             </Modal>
 
-            <Modal isOpen={signOutModal} ontentLabel="Sign out confirmation" overlayClassName="overlay" className="modal">
+            <Modal isOpen={signOutModal} ontentLabel="Sign out confirmation" overlayClassName="overlay" className="modal" aria-hidden="true">
                 <h3>Sign out</h3>
                 <span className="hint">Are you sure you want to exit?</span>
                 <div className="buttons-options">
@@ -169,7 +218,7 @@ export function AdminRoom() {
                 </div>
             </Modal>
 
-            <Modal isOpen={removeCommentModal} ontentLabel="Delete comment confirmation" overlayClassName="overlay" className="modal">
+            <Modal isOpen={removeCommentModal} ontentLabel="Delete comment confirmation" overlayClassName="overlay" className="modal" aria-hidden="true">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="delete-svg">
                     <path d="M3 5.99988H5H21" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M8 5.99988V3.99988C8 3.46944 8.21071 2.96074 8.58579 2.58566C8.96086 2.21059 9.46957 1.99988 10 1.99988H14C14.5304 1.99988 15.0391 2.21059 15.4142 2.58566C15.7893 2.96074 16 3.46944 16 3.99988V5.99988M19 5.99988V19.9999C19 20.5303 18.7893 21.039 18.4142 21.4141C18.0391 21.7892 17.5304 21.9999 17 21.9999H7C6.46957 21.9999 5.96086 21.7892 5.58579 21.4141C5.21071 21.039 5 20.5303 5 19.9999V5.99988H19Z" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -238,8 +287,10 @@ export function AdminRoom() {
                             author={question.author}
                             content={question.content}
                             key={question.id}
+                            id={question.id}
                             isHighlighted={question.isHighLighted}
                             isAnswered={question.isAnswered}
+                            responses={question.responses}
                         >
                             <button type="button" className="answer-button" aria-label="check question as answered button" onClick={() => handleCheckQuestionAsAnswered(question.id)}>
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -248,9 +299,7 @@ export function AdminRoom() {
                                 </svg>
                             </button>
                             <button type="button" className="highlight-button" aria-label="highlight button" onClick={() => handleHighlightQuestion(question.id)}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fillRule="evenodd" clipRule="evenodd" d="M12 17.9999H18C19.657 17.9999 21 16.6569 21 14.9999V6.99988C21 5.34288 19.657 3.99988 18 3.99988H6C4.343 3.99988 3 5.34288 3 6.99988V14.9999C3 16.6569 4.343 17.9999 6 17.9999H7.5V20.9999L12 17.9999Z" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
+                                <HiOutlineSparkles size={25} />
                             </button>
                             <button
                                 type="button"
@@ -264,6 +313,18 @@ export function AdminRoom() {
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="delete">
                                     <path d="M3 5.99988H5H21" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                     <path d="M8 5.99988V3.99988C8 3.46944 8.21071 2.96074 8.58579 2.58566C8.96086 2.21059 9.46957 1.99988 10 1.99988H14C14.5304 1.99988 15.0391 2.21059 15.4142 2.58566C15.7893 2.96074 16 3.46944 16 3.99988V5.99988M19 5.99988V19.9999C19 20.5303 18.7893 21.039 18.4142 21.4141C18.0391 21.7892 17.5304 21.9999 17 21.9999H7C6.46957 21.9999 5.96086 21.7892 5.58579 21.4141C5.21071 21.039 5 20.5303 5 19.9999V5.99988H19Z" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </button>
+                            <button
+                                type="button"
+                                className="comment-button"
+                                aria-label="comment button"
+                                onClick={() => {
+                                    handleCommentSection(question.id);
+                                }}
+                            >
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fillRule="evenodd" clipRule="evenodd" d="M12 17.9999H18C19.657 17.9999 21 16.6569 21 14.9999V6.99988C21 5.34288 19.657 3.99988 18 3.99988H6C4.343 3.99988 3 5.34288 3 6.99988V14.9999C3 16.6569 4.343 17.9999 6 17.9999H7.5V20.9999L12 17.9999Z" stroke="#737380" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </button>
                         </Question>

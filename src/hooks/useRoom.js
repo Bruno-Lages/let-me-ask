@@ -24,6 +24,11 @@ export function useRoom(roomId) {
                     likeCount: Object.values(value.likes ?? {}).length,
                     // eslint-disable-next-line max-len
                     likeId: Object.entries(value.likes ?? {}).find(([keyLike, like]) => like.authorId === user.id)?.[0],
+                    // eslint-disable-next-line max-len
+                    responses: Object.entries(value.responses ?? {}).map(([commentId, response]) => ({
+                        commentId,
+                        comment: response.comment,
+                    })),
                 }));
 
             setQuestions(parsedQuestions);
