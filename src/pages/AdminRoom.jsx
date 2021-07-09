@@ -19,6 +19,7 @@ import { Question } from '../components/Question';
 import logo from '../assets/logo.svg';
 import darkModeLogo from '../assets/dark-mode-logo.svg';
 import emptyQuestionsIcon from '../assets/empty-questions.svg';
+import { Button } from '../components/Button';
 
 export function AdminRoom() {
     // eslint-disable-next-line no-unused-vars
@@ -31,10 +32,14 @@ export function AdminRoom() {
     const [signOutModal, toggleSignOutModal] = useState(false);
     const [closeRoomModal, toggleCloseRoomModal] = useState(false);
     const [removeCommentModal, toggleRemoveCommentRoomModal] = useState(false);
+    const [embedVideoModal, toggleEmbedVideoModal] = useState(false);
+    const [embedVideoIframe, toggleEmbedVideoIframe] = useState(true);
     const [deletedQuestion, setDeletedQuestion] = useState('');
     Modal.setAppElement('#root');
 
-    const { questions, tittle } = useRoom(roomId);
+    const {
+        questions, tittle, embeddedVideo, platformVideo,
+    } = useRoom(roomId);
 
     function clearLoadingOverlay() {
         const menu = document.querySelector('.spinner-overlay');
@@ -81,6 +86,35 @@ export function AdminRoom() {
         });
 
         history.push('/');
+    }
+
+    async function SetEmbedVideo(videoId, platform) {
+        database.ref(`rooms/${roomId}`).update({
+            embeddedVideo: videoId,
+            platformVideo: platform,
+        });
+    }
+
+    // eslint-disable-next-line consistent-return
+    function renderEmbeddedVideo() {
+        switch (platformVideo) {
+        case 'youtu.be':
+            return <iframe width="100%" height="378" src={`https://www.youtube.com/embed/${embeddedVideo}`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="embedded-video" />;
+        case 'www.twitch.tv':
+            return <iframe src={`https://player.twitch.tv/?channel=${embeddedVideo}&parent=localhost`} frameBorder="0" allowFullScreen scrolling="no" height="378" width="100%" title={`Twitch video player: ${embeddedVideo}`} className="embedded-video" />;
+        default:
+            break;
+        }
+    }
+
+    async function handleEmbedVideo(e) {
+        e.preventDefault();
+        let videoURL = e.target.firstElementChild.value;
+        videoURL = videoURL.split('/');
+        const platform = videoURL[videoURL.length - 2];
+        videoURL = videoURL[videoURL.length - 1];
+        SetEmbedVideo(videoURL, platform);
+        console.log(platform);
     }
 
     async function handleCheckQuestionAsAnswered(questionId) {
@@ -182,6 +216,34 @@ export function AdminRoom() {
                 </div>
             </header>
 
+            <Modal isOpen={embedVideoModal} ontentLabel="embed your video to this room" overlayClassName="overlay" className="modal" aria-hidden="true">
+                <h3>Embed your video</h3>
+                <span className="hint">
+                    To embed your video, follow the steps:
+                    <ol>
+                        <li>In your video, click in &quot;share&quot;.</li>
+                        <li>Copy the link.</li>
+                        <li>Paste into the input below.</li>
+                    </ol>
+                </span>
+                <form onSubmit={(e) => {
+                    handleEmbedVideo(e);
+                    toggleEmbedVideoModal(false);
+                }}
+                >
+                    <input type="text" placeholder="Paste your video link" aria-placeholder="place your video link" />
+                    <div className="buttons-options">
+                        <button type="button" className="cancel-button" onClick={() => toggleEmbedVideoModal(false)}>cancel</button>
+                        <button
+                            type="submit"
+                            className="confirm-button"
+                        >
+                            Embeed
+                        </button>
+                    </div>
+                </form>
+            </Modal>
+
             <Modal isOpen={closeRoomModal} ontentLabel="Close room confirmation" overlayClassName="overlay" className="modal" aria-hidden="true">
                 <h3>Close room?</h3>
                 <span className="hint">Are you sure you want to close this room? You won&apos;t be able to reopen later</span>
@@ -243,6 +305,11 @@ export function AdminRoom() {
             <nav className="options-menu">
                 <ul>
                     <li>
+                        <button type="button" onClick={() => toggleEmbedVideoModal(true)}>
+                            Embed video
+                        </button>
+                    </li>
+                    <li>
                         <button
                             type="button"
                             className="close-room-button"
@@ -273,6 +340,17 @@ export function AdminRoom() {
                         <h2>{`${questions.length} ${questions.length > 1 ? 'questions' : 'question'}`}</h2>
                     )}
                 </div>
+
+                {embeddedVideo === undefined || embedVideoIframe === false ? ''
+                    : (
+                        renderEmbeddedVideo()
+                    )}
+                {embeddedVideo === undefined ? ''
+                    : (
+                        <Button type="buttom" onClick={() => toggleEmbedVideoIframe(!embedVideoIframe)}>
+                            { embedVideoIframe ? 'Hide video' : 'Show video'}
+                        </Button>
+                    )}
 
                 {questions.length === 0
                     ? (

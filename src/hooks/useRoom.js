@@ -6,6 +6,8 @@ import { database } from '../config/firebase';
 export function useRoom(roomId) {
     const [questions, setQuestions] = useState([]);
     const [tittle, setTittle] = useState('');
+    const [embeddedVideo, setEmbeddedVideo] = useState('');
+    const [platformVideo, setPlatformVideo] = useState('');
     const { user } = useContext(authContext);
 
     useEffect(() => {
@@ -33,8 +35,12 @@ export function useRoom(roomId) {
 
             setQuestions(parsedQuestions);
             setTittle(databaseRoom.name);
+            setEmbeddedVideo(databaseRoom.embeddedVideo);
+            setPlatformVideo(databaseRoom.platformVideo);
         });
     }, [roomId, user.id]);
 
-    return { questions, tittle };
+    return {
+        questions, tittle, embeddedVideo, platformVideo,
+    };
 }

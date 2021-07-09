@@ -97,13 +97,13 @@ ul {
     width: 100%;
 }
 
-li {
+.options-menu li {
     list-style-type: none;
     width: 100%;
     transition: 0.5s;
 }
 
-li:hover {
+.options-menu li:hover {
     background-color: rgb(202, 196, 196);
 }
 
@@ -129,8 +129,7 @@ li:hover {
 .modal {
     width: 45vw;
     min-width: fit-content;
-    height: 30vh;
-    min-height: 8rem;
+    min-height: max-content;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -142,6 +141,23 @@ li:hover {
     background: rgb(255, 255, 255); 
     border-radius: 4px; 
     padding: 20px;
+}
+
+.modal .hint {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal form {
+    width: 80%;
+}
+
+form .buttons-options {
+    width: 100%;
+}
+
+.modal input:focus-visible {
+    outline: none;
 }
 
 .response-form {
@@ -296,6 +312,10 @@ h3 {
         margin-left: 0;
         margin-bottom: 0.5rem;
     }
+}
+
+.embedded-video {
+    border-radius: 5px;
 }
 
 .room-form {

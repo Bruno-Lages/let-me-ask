@@ -54,7 +54,7 @@
     color: #96969f47;
 }
 
-.dark-body #submit-button {
+.dark-body #submit-button, .dark-body .button {
     background-color: #835afd52;
     color: #d5d5d5;
 }

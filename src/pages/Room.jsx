@@ -61,7 +61,9 @@ export function Room() {
         checkDarkMode();
     }, [user.id, darkMode]);
 
-    const { questions, tittle } = useRoom(roomId);
+    const {
+        questions, tittle, embeddedVideo, platformVideo,
+    } = useRoom(roomId);
 
     function clearTextArea() {
         const textArea = document.querySelector('.new-question');
@@ -82,6 +84,18 @@ export function Room() {
             });
         } else {
             new Error('you must be logged to like a question');
+        }
+    }
+
+    // eslint-disable-next-line consistent-return
+    function renderEmbeddedVideo() {
+        switch (platformVideo) {
+        case 'youtu.be':
+            return <iframe width="100%" height="378px" src={`https://www.youtube.com/embed/${embeddedVideo}`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="embedded-video" />;
+        case 'www.twitch.tv':
+            return <iframe src={`https://player.twitch.tv/?channel=${embeddedVideo}&parent=localhost`} frameBorder="0" allowFullScreen scrolling="no" height="378px" width="100%" title={`Twitch video player: ${embeddedVideo}`} className="embedded-video" />;
+        default:
+            break;
         }
     }
 
@@ -185,6 +199,9 @@ export function Room() {
                         <h2>{`${questions.length} ${questions.length > 1 ? 'questions' : 'question'}`}</h2>
                     )}
                 </div>
+
+                {embeddedVideo === undefined ? '' : (renderEmbeddedVideo())}
+
                 <form className="room-form" onSubmit={(e) => handleSendQuestion(e)}>
                     <textarea cols="1200" rows="6" className="new-question" placeholder="What do you want to ask?" aria-placeholder="What do you want to ask?" onChange={(e) => setNewQuestion(e.target.value)} />
                     <footer className="form-footer">
@@ -221,6 +238,7 @@ export function Room() {
                             key={question.id}
                             isHighlighted={question.isHighLighted}
                             isAnswered={question.isAnswered}
+                            responses={question.responses}
                         >
                             <button type="button" aria-label="like" className={`like ${question.likeId ? 'liked' : ''} ${darkMode ? 'dark-icon' : ''}`} onClick={() => handleLike(question.id, question.likeId)}>
                                 { question.likeCount > 0
@@ -245,6 +263,7 @@ export function Room() {
                             key={question.id}
                             isHighlighted={question.isHighLighted}
                             isAnswered={question.isAnswered}
+                            responses={question.responses}
                         >
                             <button type="button" aria-label="like" className={`like ${question.likeId ? 'liked' : ''} ${darkMode ? 'dark-icon' : ''}`} onClick={() => handleLike(question.id, question.likeId)}>
                                 { question.likeCount > 0
@@ -267,6 +286,7 @@ export function Room() {
                         key={question.id}
                         isHighlighted={question.isHighLighted}
                         isAnswered={question.isAnswered}
+                        responses={question.responses}
                     >
                         <button type="button" aria-label="like" className={`like ${question.likeId ? 'liked' : ''} ${darkMode ? 'dark-icon' : ''}`} onClick={() => handleLike(question.id, question.likeId)}>
                             { question.likeCount > 0
