@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { FaEllipsisV, FaMoon } from 'react-icons/fa';
 import Modal from 'react-modal';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { Toaster, toast } from 'react-hot-toast';
 import { database } from '../config/firebase';
 
 import { authContext } from '../contexts/authContext';
@@ -48,7 +49,12 @@ export function Room() {
     useEffect(async () => {
         const roomData = await database.ref(`rooms/${roomId}`).get();
         if (roomData.val().closedAt) {
-            alert('closed room');
+            darkMode ? toast.error('closed room', {
+                style: {
+                    background: '#100a23',
+                    color: '#8b949e',
+                },
+            }) : toast.error('closed room');
             history.push('/');
         }
         if (user.id === roomData.val().authorId) {
@@ -83,7 +89,12 @@ export function Room() {
                 authorId: user.id,
             });
         } else {
-            new Error('you must be logged to like a question');
+            darkMode ? toast.error('you must be logged to like a question', {
+                style: {
+                    background: '#100a23',
+                    color: '#8b949e',
+                },
+            }) : toast.error('you must be logged to like a question');
         }
     }
 
@@ -105,11 +116,21 @@ export function Room() {
         setNewQuestion('');
 
         if (newQuestion.trim() === '') {
-            new Error('empty question');
+            darkMode ? toast.error('empty question', {
+                style: {
+                    background: '#100a23',
+                    color: '#8b949e',
+                },
+            }) : toast.error('empty question');
             return;
         }
         if (!user) {
-            new Error('the user must be logged');
+            darkMode ? toast.error('the user must be logged', {
+                style: {
+                    background: '#100a23',
+                    color: '#8b949e',
+                },
+            }) : toast.error('the user must be logged');
             return;
         }
 
@@ -136,6 +157,8 @@ export function Room() {
             <div className="spinner-overlay" aria-hidden="true">
                 <ClipLoader size={100} className="modal" loading={isLoading} speedMultiplier={1} color="#835afd" />
             </div>
+
+            <Toaster position="top-center" reverseOrder={false} />
 
             <header>
                 <img src={darkMode ? darkModeLogo : logo} alt="let me ask logo" className="logo" />

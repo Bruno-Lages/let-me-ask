@@ -29,6 +29,10 @@
     color: #8b949e;
 }
 
+.dark-body .home-button p {
+    color: #fefefe;
+}
+
 .dark-body li:hover {
     background-color: #060a0f;
 }

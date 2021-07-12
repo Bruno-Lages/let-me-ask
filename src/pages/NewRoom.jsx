@@ -1,5 +1,6 @@
 import { React, useContext, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { Toaster, toast } from 'react-hot-toast';
 import { database } from '../config/firebase';
 
 import { Button } from '../components/Button';
@@ -7,11 +8,12 @@ import { Button } from '../components/Button';
 import '../style/newRoomStyle.css';
 import svgImage from '../assets/illustration.svg';
 import logo from '../assets/logo.svg';
+import darkModeLogo from '../assets/dark-mode-logo.svg';
 
 import { authContext } from '../contexts/authContext';
 
 export function NewRoom() {
-    const { user } = useContext(authContext);
+    const { user, darkMode } = useContext(authContext);
 
     const history = useHistory();
 
@@ -20,6 +22,17 @@ export function NewRoom() {
     async function handleNewroom(e) {
         e.preventDefault();
         const roomRef = database.ref('rooms');
+
+        if (Object.keys(user)) {
+            // eslint-disable-next-line no-unused-expressions
+            darkMode ? toast.error('you must be logged to create a room', {
+                style: {
+                    background: '#100a23',
+                    color: '#8b949e',
+                },
+            }) : toast.error('you must be logged to create a room');
+            return;
+        }
 
         if (room.trim() !== '') {
             const newRoom = await roomRef.push({
@@ -39,8 +52,9 @@ export function NewRoom() {
             </aside>
 
             <main className="new-room-main">
+                <Toaster position="top-center" reverseOrder={false} />
                 <div className="room-container">
-                    <img src={logo} alt="let me ask logo" />
+                    <img src={darkMode ? darkModeLogo : logo} alt="let me ask logo" />
                     <h1>{user.name}</h1>
                     <form onSubmit={(e) => handleNewroom(e)}>
                         <input type="text" name="roomName" placeholder="Create a name to your room" aria-placeholder="room name" onChange={(e) => setRoom(e.target.value)} />

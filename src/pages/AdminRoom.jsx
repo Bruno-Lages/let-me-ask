@@ -6,6 +6,7 @@ import { FaEllipsisV, FaMoon } from 'react-icons/fa';
 import { HiOutlineSparkles } from 'react-icons/hi';
 import Modal from 'react-modal';
 import ClipLoader from 'react-spinners/ClipLoader';
+import { Toaster, toast } from 'react-hot-toast';
 
 import { database } from '../config/firebase';
 
@@ -67,6 +68,10 @@ export function AdminRoom() {
     useEffect(() => {
         async function Checkuser() {
             const roomData = await database.ref(`rooms/${roomId}`).get();
+            if (roomData.val().closedAt) {
+                toast.error('closed room');
+                history.push('/');
+            }
             if (user.id !== roomData.val().authorId) {
                 history.push(`/rooms/${roomId}`);
             }
@@ -215,6 +220,8 @@ export function AdminRoom() {
                     ) : ''}
                 </div>
             </header>
+
+            <Toaster position="top-center" reverseOrder={false} />
 
             <Modal isOpen={embedVideoModal} ontentLabel="embed your video to this room" overlayClassName="overlay" className="modal" aria-hidden="true">
                 <h3>Embed your video</h3>
