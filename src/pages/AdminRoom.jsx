@@ -106,7 +106,7 @@ export function AdminRoom() {
         case 'youtu.be':
             return <iframe width="100%" height="378" src={`https://www.youtube.com/embed/${embeddedVideo}`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="embedded-video" />;
         case 'www.twitch.tv':
-            return <iframe src={`https://player.twitch.tv/?channel=${embeddedVideo}&parent=localhost`} frameBorder="0" allowFullScreen scrolling="no" height="378" width="100%" title={`Twitch video player: ${embeddedVideo}`} className="embedded-video" />;
+            return <iframe src={`https://player.twitch.tv/?channel=${embeddedVideo}&parent=let-me-ask-9fcc1.web.app`} frameBorder="0" allowFullScreen scrolling="no" height="378" width="100%" title={`Twitch video player: ${embeddedVideo}`} className="embedded-video" />;
         default:
             break;
         }

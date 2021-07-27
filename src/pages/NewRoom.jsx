@@ -23,7 +23,7 @@ export function NewRoom() {
         e.preventDefault();
         const roomRef = database.ref('rooms');
 
-        if (Object.keys(user)) {
+        if (!Object.keys(user).length) {
             // eslint-disable-next-line no-unused-expressions
             darkMode ? toast.error('you must be logged to create a room', {
                 style: {
